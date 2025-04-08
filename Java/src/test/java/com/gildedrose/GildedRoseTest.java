@@ -15,195 +15,173 @@ class GildedRoseTest {
 
     private static final String NORMAL_ITEM = "Normal item";
 
+    private GildedRose app;
+
     @Test
     void testNormalItemQualityDegradationBeforeSellIn() {
         // Given
-        Item item = new Item(NORMAL_ITEM, 10, 10);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(NORMAL_ITEM, 9, 9);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(NORMAL_ITEM, 10, 10);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(NORMAL_ITEM, 9, 9);
     }
 
     @Test
     void testNormalItemQualityDegradationAfterSellIn() {
         // Given
-        Item item = new Item(NORMAL_ITEM, 0, 10);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(NORMAL_ITEM, -1, 8);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(NORMAL_ITEM, 0, 10);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(NORMAL_ITEM, -1, 8);
     }
 
     @Test
-    void testNormalItemQualityNotUnderMinimum() {
+    void testNormalItemQualityNotUnderMinimumBeforeSellIn() {
         // Given
-        Item item = new Item(NORMAL_ITEM, 10, MINIMUM_QUALITY);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(NORMAL_ITEM, 9, MINIMUM_QUALITY);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(NORMAL_ITEM, 10, MINIMUM_QUALITY);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(NORMAL_ITEM, 9, MINIMUM_QUALITY);
+    }
+
+    @Test
+    void testNormalItemQualityNotUnderMinimumAfterSellIn() {
+        // Given
+        givenNameSellInAndQualityOfItem(NORMAL_ITEM, 0, MINIMUM_QUALITY);
+
+        // When
+        app.updateQuality();
+
+        // Then
+        thenItemBecomesNameSellInAndQuality(NORMAL_ITEM, -1, MINIMUM_QUALITY);
     }
 
     @Test
     void testAgedBrieQualityIncrease() {
         // Given
-        Item item = new Item(AGED_BRIE, 10, 10);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(AGED_BRIE, 9, 11);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(AGED_BRIE, 10, 10);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(AGED_BRIE, 9, 11);
     }
 
     @Test
     void testAgedBrieQualityNotOverMaximum() {
         // Given
-        Item item = new Item(AGED_BRIE, 10, MAXIMUM_QUALITY);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(AGED_BRIE, 9, MAXIMUM_QUALITY);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(AGED_BRIE, 10, MAXIMUM_QUALITY);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(AGED_BRIE, 9, MAXIMUM_QUALITY);
     }
 
     @Test
     void testSulfurasNotChanged() {
         // Given
-        Item item = new Item(SULFURAS, 10, SULFURAS_QUALITY);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(SULFURAS, 10, 80);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(SULFURAS, 10, SULFURAS_QUALITY);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(SULFURAS, 10, SULFURAS_QUALITY);
     }
 
     @Test
     void testBackstagePassesQualityIncreaseBy1WhenOver10DaysSellIn() {
         // Given
-        Item item = new Item(BACKSTAGE_PASSES, 12, 10);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(BACKSTAGE_PASSES, 11, 11);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(BACKSTAGE_PASSES, 12, 10);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(BACKSTAGE_PASSES, 11, 11);
     }
 
     @Test
     void testBackstagePassesQualityIncreaseBy2WhenBetween10And5DaysSellIn() {
         // Given
-        Item item = new Item(BACKSTAGE_PASSES, 8, 10);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(BACKSTAGE_PASSES, 7, 12);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(BACKSTAGE_PASSES, 8, 10);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(BACKSTAGE_PASSES, 7, 12);
     }
 
     @Test
     void testBackstagePassesQualityIncreaseBy3WhenBetween5And0DaysSellIn() {
         // Given
-        Item item = new Item(BACKSTAGE_PASSES, 3, 10);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(BACKSTAGE_PASSES, 2, 13);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(BACKSTAGE_PASSES, 3, 10);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(BACKSTAGE_PASSES, 2, 13);
     }
 
     @Test
     void testBackstagePassesQuality0WhenSellInPassed() {
         // Given
-        Item item = new Item(BACKSTAGE_PASSES, 0, 10);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(BACKSTAGE_PASSES, -1, 0);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(BACKSTAGE_PASSES, 0, 10);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(BACKSTAGE_PASSES, -1, 0);
     }
 
     @Test
     void testBackstagePassesQualityNotOver50() {
         // Given
-        Item item = new Item(BACKSTAGE_PASSES, 10, MAXIMUM_QUALITY);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(BACKSTAGE_PASSES, 9, MAXIMUM_QUALITY);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(BACKSTAGE_PASSES, 10, MAXIMUM_QUALITY);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(BACKSTAGE_PASSES, 9, MAXIMUM_QUALITY);
     }
 
     @Test
     void testConjuredItemQualityDoubleDegradation() {
         // Given
-        Item item = new Item(CONJURED_ITEM, 10, 10);
-        Item[] items = new Item[] { item };
-        Item itemExpected = new Item(CONJURED_ITEM, 9, 8);
-        GildedRose app = new GildedRose(items);
+        givenNameSellInAndQualityOfItem(CONJURED_ITEM, 10, 10);
 
         // When
         app.updateQuality();
 
         // Then
-        assertEquals(itemExpected.sellIn, app.items[0].sellIn);
-        assertEquals(itemExpected.quality, app.items[0].quality);
+        thenItemBecomesNameSellInAndQuality(CONJURED_ITEM, 9, 8);
+    }
+
+    private void givenNameSellInAndQualityOfItem(String name, int sellIn, int quality) {
+        Item item = new Item(name, sellIn, quality);
+        Item[] items = new Item[] { item };
+        app = new GildedRose(items);
+    }
+
+    private void thenItemBecomesNameSellInAndQuality(String name, int sellIn, int quality) {
+        assertEquals(name, app.items[0].name);
+        assertEquals(sellIn, app.items[0].sellIn);
+        assertEquals(quality, app.items[0].quality);
     }
 }
