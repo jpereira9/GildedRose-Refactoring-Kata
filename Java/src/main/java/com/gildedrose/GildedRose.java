@@ -9,7 +9,7 @@ import static com.gildedrose.ConstantsUtils.STANDARD_QUALITY_DEGRADATION;
 import static com.gildedrose.ConstantsUtils.SULFURAS;
 
 class GildedRose {
-    Item[] items;;
+    Item[] items;
 
     public GildedRose(Item[] items) {
         this.items = items;
